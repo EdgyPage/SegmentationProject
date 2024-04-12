@@ -13,8 +13,11 @@ class CustomDataset(Dataset):
         self.imageTransform = imageTransform
         self.labelTransform = labelTransform
 
-        self.imageFileNames = sorted(os.listdir(imageDir), key= sortByCaseThenFrame)
-        self.labelFileNames = sorted(os.listdir(labelDir), key= sortByCaseThenFrame)
+        self.preImageFileNames = [file for file in os.listdir(imageDir) if file.endswith(('jpg', '.jpeg', '.png'))]
+        self.preLabelFileNames = [file for file in os.listdir(labelDir) if file.endswith(('jpg', '.jpeg', '.png'))]
+
+        self.imageFileNames = sorted(self.preImageFileNames, key= sortByCaseThenFrame)
+        self.labelFileNames = sorted(self.preLabelFileNames, key= sortByCaseThenFrame)
         
     def __len__(self):
         return len(self.imageFileNames)
@@ -48,6 +51,7 @@ class CustomDataset(Dataset):
 #thanks Chat GPT
 def sortByCaseThenFrame(filePath):
     parts = filePath.split('_')
+    #print(parts)
     caseNumber = int(parts[3])
     frameNumber = int(parts[5].split('.')[0])
     return (caseNumber, frameNumber)
