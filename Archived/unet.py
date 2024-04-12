@@ -7,7 +7,7 @@ from torchvision import transforms
 from PIL import Image
 
 class unet(nn.Module):
-    def __init__(self):
+    def __init__(self, labelDim = 1024):
         super().__init__()
 
         #Source - https://towardsdatascience.com/cook-your-first-u-net-in-pytorch-b3297a844cf3
@@ -18,9 +18,9 @@ class unet(nn.Module):
         #self.POOLn -> max pooling layer of row n - self.pool1 pools the feature maps of row 1 for row 2
         #convolution calculater - https://madebyollin.github.io/convnet-calculator/
         #in channels is one because input image has been converted to greyscale on import to dataloader
-        self.name = ""
-        self.trainingLosses = []
-        self.validationLosses = []
+        self.labelDim = labelDim
+        self.traningLosses = None
+        self.validationLoss = None
 
         self.e11 = nn.Conv2d(in_channels= 3, out_channels= 64, kernel_size= 3, padding= 1) #1022x254x64
         self.e12 = nn.Conv2d(64, 64, 3, padding=1) #1020x252x64
