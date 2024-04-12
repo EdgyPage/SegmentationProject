@@ -5,7 +5,7 @@ from PIL import Image
 import torchvision
 from torch.utils.data import DataLoader, ConcatDataset, Dataset, random_split
 
-class TrainVal(Dataset):
+class CustomDataset(Dataset):
     def __init__(self, imageDir, labelDir, imageTransform = None, labelTransform = None):
         super().__init__()
         self.imageDir = imageDir
@@ -54,7 +54,7 @@ def sortByCaseThenFrame(filePath):
 
 
 def imageDirsToLoaders(imageDir : str, labelDir: str, batchSize :int = 32, trainSplit : float = .8, imageTransforms : list = None, labelTransforms : list = None):
-    dataset = TrainVal(imageDir= imageDir, labelDir= labelDir, imageTransform= imageTransforms, labelTransform=labelTransforms)
+    dataset = CustomDataset(imageDir= imageDir, labelDir= labelDir, imageTransform= imageTransforms, labelTransform=labelTransforms)
 
     trainSize = int(trainSplit * len(dataset))
     valSize = len(dataset) - trainSize
@@ -68,8 +68,8 @@ def imageDirsToLoaders(imageDir : str, labelDir: str, batchSize :int = 32, train
 
 def imageDirsToTestLoader(imageDir : str, labelDir: str, testCases: int = 4, imageTransforms : list = None, labelTransforms : list = None):
     
-    dataset = TrainVal(imageDir= imageDir, labelDir= labelDir, imageTransform= imageTransforms, labelTransform=labelTransforms)
-    testLoader = DataLoader(dataset, batch_size= int(len(dataset)/testCases), shuffle= False)
+    dataset = CustomDataset(imageDir= imageDir, labelDir= labelDir, imageTransform= imageTransforms, labelTransform=labelTransforms)
+    testLoader = DataLoader(dataset, batch_size= int(len(dataset)/testCases), shuffle= False, num_workers= os.cpu_count(), pin_memory= True)
 
     return testLoader
 
