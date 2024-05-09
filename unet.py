@@ -123,7 +123,7 @@ class unet(nn.Module):
         self.name = savedAttributes['model_name']
         self.trainingLosses = savedAttributes['training_losses']
         self.validationLosses = savedAttributes['validation_losses']
-        self.curveParameters = savedAttributes['curve_parameters']
+        #self.curveParameters = savedAttributes['curve_parameters']
 
     def saveAttributes(self, modelSavePath):
 
@@ -132,8 +132,8 @@ class unet(nn.Module):
                         'model_state_dict': self.state_dict(),
                         'model_name': self.name,
                         'training_losses': self.trainingLosses,
-                        'validation_losses': self.validationLosses,
-                        'curve_parameters': self.curveParameters
+                        'validation_losses': self.validationLosses
+                        #'curve_parameters': self.curveParameters
                     }
                         , modelSavePath )
     
