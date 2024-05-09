@@ -21,6 +21,7 @@ class unet(nn.Module):
         self.name = ""
         self.trainingLosses = []
         self.validationLosses = []
+        self.curveParameters = []
 
         self.e11 = nn.Conv2d(in_channels= 3, out_channels= 64, kernel_size= 3, padding= 1) #1022x254x64
         self.e12 = nn.Conv2d(64, 64, 3, padding=1) #1020x252x64
@@ -115,5 +116,25 @@ class unet(nn.Module):
         #out = torch.threshold(out, 250, 255)
 
         return out
+    
+    def loadAttributes(self, modelLoadPath):
+        savedAttributes = torch.load(modelLoadPath)
+        self.load_state_dict(savedAttributes['model_state_dict'])
+        self.name = savedAttributes['model_name']
+        self.trainingLosses = savedAttributes['training_losses']
+        self.validationLosses = savedAttributes['validation_losses']
+        self.curveParameters = savedAttributes['curve_parameters']
+
+    def saveAttributes(self, modelSavePath):
+
+        torch.save(
+                        {
+                        'model_state_dict': self.state_dict(),
+                        'model_name': self.name,
+                        'training_losses': self.trainingLosses,
+                        'validation_losses': self.validationLosses,
+                        'curve_parameters': self.curveParameters
+                    }
+                        , modelSavePath )
     
     

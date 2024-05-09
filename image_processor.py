@@ -70,10 +70,11 @@ def imageDirsToLoaders(imageDir : str, labelDir: str, batchSize :int = 32, train
 
     return trainLoader, valLoader
 
-def imageDirsToTestLoader(imageDir : str, labelDir: str, testCases: int = 4, imageTransforms : list = None, labelTransforms : list = None):
+def imageDirsToTestLoader(imageDir : str, labelDir: str, testCases: int = 4, transform: list = []):
     
-    dataset = CustomDataset(imageDir= imageDir, labelDir= labelDir, imageTransform= imageTransforms, labelTransform=labelTransforms)
-    testLoader = DataLoader(dataset, batch_size= int(len(dataset)/testCases), shuffle= False, num_workers= os.cpu_count(), pin_memory= True)
+    dataset = CustomDataset(imageDir= imageDir, labelDir= labelDir, imageTransform= transform, labelTransform=transform)
+    #each batch is one to make working with batches easier for testing
+    testLoader = DataLoader(dataset, batch_size= 1, shuffle= False, num_workers= os.cpu_count(), pin_memory= True)
 
     return testLoader
 
