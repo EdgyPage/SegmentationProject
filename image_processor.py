@@ -42,7 +42,7 @@ class CustomDataset(Dataset):
         #squeezes label image to flattened tensor for comparison
         #label = label.flatten()
 
-        #label = torch.threshold(label, 254, 1) 
+        label = torch.where(label > 10, 255.0, 0.0) 
 
 
 
